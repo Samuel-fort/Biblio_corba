@@ -1,0 +1,34 @@
+module Biblio {
+  struct Livre {
+    long id; string titre; string auteur; string isbn; boolean disponible;
+  };
+  typedef sequence<Livre> ListeLivres;
+
+  struct Adherent { long id; string nom; string email; };
+
+  struct Emprunt {
+    long id; long livre_id; string titre;
+    string date_emprunt; string date_retour_prevue;
+  };
+  typedef sequence<Emprunt> ListeEmprunts;
+
+  exception ErreurBD          { string message; };
+  exception Introuvable       { string entite; long id; };
+  exception LivreIndisponible { long livre_id; };
+  exception LimiteAtteinte    { long adherent_id; long maximum; };
+
+  interface Bibliotheque {
+    long ajouter_livre(in string titre, in string auteur, in string isbn)
+        raises (ErreurBD);
+    long ajouter_adherent(in string nom, in string email)
+        raises (ErreurBD);
+
+    ListeLivres lister_livres() raises (ErreurBD);
+    ListeLivres rechercher(in string motif) raises (ErreurBD);
+
+    long emprunter(in long livre_id, in long adherent_id, in long jours)
+        raises (ErreurBD, Introuvable, LivreIndisponible, LimiteAtteinte);
+    void retourner(in long emprunt_id) raises (ErreurBD, Introuvable);
+    ListeEmprunts emprunts_en_cours(in long adherent_id) raises (ErreurBD);
+  };
+};

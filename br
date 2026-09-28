@@ -1,0 +1,23 @@
+Voici les changements effectués :
+- Installation des dépendances CORBA et Java 8 :
+  - omniORB, omniNames, omniidl
+  - bibliothèques de développement MySQL/MariaDB
+  - JDK 8, requis pour idlj
+- Compilation du projet :
+  - make -C cpp → génération des fichiers CORBA C++ et création de cpp/server
+  - make -C java → génération des stubs Java dans java/gen/ et classes dans java/classes/
+- Initialisation de la base MariaDB de XAMPP :
+  - exécution de base.sql
+  - création/utilisation de la base biblio
+  - utilisateur biblio avec le mot de passe motdepasse
+  - autorisation ajoutée pour biblio@127.0.0.1
+- Modification de [cpp/server.cc (line 191)](/home/samuel/Documents/S5/biblio-corba/cpp/server.cc:191) :
+  - connexion base de données changée de "localhost" à "127.0.0.1".
+  - Cela force une connexion TCP vers MariaDB/XAMPP, au lieu de chercher le socket système /var/run/mysqld/mysqld.sock.
+- Utilisation du Naming Service déjà actif sur le port 2809 :
+  - on ne lance plus run.sh, car il tente de démarrer un second omniNames.
+  - serveur et client sont lancés manuellement avec -ORBInitRef ....
+Aucun changement n’a été fait dans Client.java, ConsoleTest.java, base.sql ou run.sh.
+
+
+8:12 AM
